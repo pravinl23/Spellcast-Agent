@@ -82,6 +82,9 @@ def define_region():
     # button-1 is left mouse button, when clicked it calls on_canvas_click function
     dot_canvas.bind("<Button-1>", on_canvas_click)
 
+    # delete the screenshot because it is uncessary after this
+    os.remove(background_ss)
+
 if __name__ == "__main__":
     # create the popup window for defining region
     root = tk.Tk()
