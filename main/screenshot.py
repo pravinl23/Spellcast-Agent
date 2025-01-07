@@ -20,6 +20,7 @@ def take_screenshot():
     screenshot = pyautogui.screenshot(region=region)
     screenshot.save(screenshot_path)
 
+
 if __name__ == "__main__":
     # create the popup window for defining region
     root = tk.Tk()

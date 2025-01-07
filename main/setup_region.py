@@ -85,6 +85,7 @@ def define_region():
     # delete the screenshot because it is uncessary after this
     os.remove(background_ss)
 
+
 if __name__ == "__main__":
     # create the popup window for defining region
     root = tk.Tk()
