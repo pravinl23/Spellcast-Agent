@@ -10,6 +10,7 @@ def main():
     # run setup_region.py to define the region
     subprocess.run(["python", setup_region_path], check=True)
 
+
     # run screenshot.py to take a screenshot of the defined region
     subprocess.run(["python", screenshot_path], check=True)
 

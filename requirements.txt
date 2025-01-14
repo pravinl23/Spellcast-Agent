@@ -1,0 +1,6 @@
+ultralytics
+torch>=1.7.0
+tk
+pillow
+pyautogui
+pip install --upgrade pip

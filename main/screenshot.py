@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # this is for the button on the popup window
     button = tk.Button(
         root,
-        text="Define Region",
+        text="Get Words",
         font='Helvetica 18 bold',
         command=take_screenshot # calls the define_region function on click
     )
