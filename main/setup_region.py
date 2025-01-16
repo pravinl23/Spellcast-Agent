@@ -1,7 +1,7 @@
 import tkinter as tk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageGrab
+from screeninfo import get_monitors
 import os
-import pyautogui
 
 # global variables
 region = None
@@ -56,10 +56,11 @@ def define_region():
     if os.path.exists(background_ss):
         os.remove(background_ss)
     # capture the entire screen using pyautogui and save it as a file
-    bg_ss = pyautogui.screenshot()
+    bg_ss = ImageGrab.grab()
     bg_ss.save(background_ss)
-    # get the screen dimensions (width and height) using pyautogui
-    screen_width, screen_height = pyautogui.size()
+    # get the screen dimensions (width and height)
+    monitor = get_monitors()[0]  # get primary monitor (adjust index if needed for multi-monitor setups)
+    screen_width, screen_height = monitor.width, monitor.height
     # open the saved screenshot and resize it to match the screen dimensions
     screenshot = Image.open(background_ss)
     screenshot = screenshot.resize((screen_width, screen_height), Image.Resampling.LANCZOS)

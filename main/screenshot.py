@@ -1,6 +1,6 @@
 import tkinter as tk
 import os
-import pyautogui
+from PIL import ImageGrab
 
 # load region from the file region_data.txt which is collected by the program on setup_region.py
 def load_region():
@@ -17,7 +17,12 @@ def take_screenshot():
     screenshot_path = "grid.png"
     if os.path.exists(screenshot_path):
         os.remove(screenshot_path)  # delete the previous screenshot if it exists already
-    screenshot = pyautogui.screenshot(region=region)
+    
+    left, top, width, height = region
+    right = left + width
+    bottom = top + height
+    
+    screenshot = ImageGrab.grab(bbox=(left, top, right, bottom))
     screenshot.save(screenshot_path)
 
 
