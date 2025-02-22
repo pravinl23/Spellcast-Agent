@@ -42,7 +42,7 @@ def to_2d_array(detections, rows, cols):
     return grid
 
 
-def main():
+def export_grid():
     # Temporary model, trained by CHY4E
     model_path = "best.pt"
     model = YOLO(model_path)
@@ -81,6 +81,3 @@ def main():
     grid = to_2d_array(detections, rows=5, cols=5)
     
     return grid
-
-if __name__ == "__main__":
-    main()

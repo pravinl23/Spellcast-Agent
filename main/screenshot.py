@@ -10,8 +10,6 @@ def load_region():
         os.remove('region_data.txt')
         return tuple(map(int, region_data))
 
-region = load_region()
-
 def take_screenshot():
     # Take a screenshot of the specified region
     screenshot_path = "grid.png"
@@ -25,8 +23,12 @@ def take_screenshot():
     screenshot = ImageGrab.grab(bbox=(left, top, right, bottom))
     screenshot.save(screenshot_path)
 
+    root.destroy()
+
 
 if __name__ == "__main__":
+
+    region = load_region()
     # Create the popup window for defining region
     root = tk.Tk()
     # This is for the actual window not button
