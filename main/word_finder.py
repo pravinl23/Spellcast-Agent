@@ -1,6 +1,4 @@
-import os
-
-# Define the letter point mapping.
+# Define the letter point mapping
 score_mapping = {
     'A': 1, 'E': 1, 'I': 1, 'O': 1,
     'N': 2, 'R': 2, 'S': 2, 'T': 2,
@@ -12,12 +10,26 @@ score_mapping = {
     'Q': 8, 'Z': 8
 }
 
-
-grid = [
-    ['L', 'V', 'O', 'L', 'E'],
-    ['O', 'A', 'D', 'K', 'E'],
-    ['V', 'O', 'B', 'S', 'O'],
-    ['R', 'F', 'T', 'N', 'E'],
-    ['I', 'A', 'N', 'D', 'I']
+# Directions the path can move 
+DIRECTIONS = [
+    (-1, -1), (-1, 0), (-1, 1),
+    (0, -1),           (0, 1),
+    (1, -1),  (1, 0),  (1, 1)
 ]
-ROWS, COLS = 5, 5
+
+def load_dictionary(dictionary_path):
+    with open(dictionary_path, 'r') as f:
+        # For each line in the dictionary, strip whitespace, convert to uppercase
+        words = [w.strip().upper() for w in f]
+
+    # Create an empty set for all valid prefixes
+    prefix_set = set()
+
+    for word in words:
+        # Generate all prefixes for each word
+        for i in range(1, len(word)+1):
+            prefix_set.add(word[:i])
+
+    # Return both the list of words and all possible prefixes
+    return words, prefix_set
+
