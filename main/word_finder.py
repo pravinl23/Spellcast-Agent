@@ -32,4 +32,3 @@ def load_dictionary(dictionary_path):
 
     # Return both the list of words and all possible prefixes
     return words, prefix_set
-

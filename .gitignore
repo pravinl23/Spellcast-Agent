@@ -4,3 +4,10 @@ __pycache__/
 venv/
 .env/
 grid.png
+dictionary.txt
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
