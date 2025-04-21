@@ -1,36 +1,95 @@
-import subprocess
 import os
 from export_grid import export_grid
 from word_finder import solve_grid
-def main():
+from pynput import keyboard
+from setup_region import define_region
+from screenshot import take_screenshot
+import tkinter as tk
+from PIL import Image, ImageTk, ImageGrab
+from screeninfo import get_monitors
+import queue
+import threading
+import subprocess
+import sys
 
-    # Define the paths to the scripts
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    setup_region_path = os.path.join(base_dir, "setup_region.py")
-    screenshot_path = os.path.join(base_dir, "screenshot.py")
+gui_queue = queue.Queue()
 
+# Queue GUI task instead of calling directly
+def run_setup_region():
+    script = os.path.join(os.path.dirname(__file__), "setup_region.py")
+    python_exe = sys.executable
+    subprocess.Popen([python_exe, script])
 
-    # 1st Define the region to ss
-    subprocess.run(["python", setup_region_path], check=True)
+def run_screenshot():
+    take_screenshot()
 
-    # 2nd Take a screenshot of the defined region
-    subprocess.run(["python", screenshot_path], check=True)
-
-    # Extract the grid from the screenshot
+def get_output():
     grid = export_grid()
-
     for row in grid:
         print(row)
-
-    # 4th Solve the grid
     results = solve_grid(grid)
-
     print(f"\nBest word found: {results['word']} (Score: {results['score']})")
     print("\nPath to follow:")
     print(results['path_instructions'])
     print("\nGrid with path:")
     print(results['grid_display'])
-        
+
+# Track pressed keys for Command shortcuts
+current_keys = set()
+
+def on_press(key):
+    try:
+        current_keys.add(key)
+        if keyboard.Key.cmd in current_keys and hasattr(key, 'char'):
+            if key.char == '1':
+                print("Setting up region...")
+                run_setup_region()
+            elif key.char == '2':
+                print("Taking screenshot...")
+                run_screenshot()
+            elif key.char == '3':
+                print("Processing output...")
+                get_output()
+    except AttributeError:
+        pass
+
+
+def on_release(key):
+    try:
+        current_keys.remove(key)
+    except KeyError:
+        pass
+
+# Main entry point: starts listener and runs Tk loop on main thread
+def main():
+    global root
+    print("Spellcast Solver is running in the background.")
+    print("Use the following keyboard shortcuts:")
+    print("⌘+1: Setup Region")
+    print("⌘+2: Take Screenshot")
+    print("⌘+3: Process and Get Output")
+    print("Press Ctrl+C to exit")
+
+    listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+    listener_thread = threading.Thread(target=listener.start, daemon=True)
+    listener_thread.start()
+
+    # Initialize main Tk root for GUI tasks
+    root = tk.Tk()
+    root.withdraw()
+
+    # Periodically poll for queued GUI tasks
+    def poll_gui_tasks():
+        while not gui_queue.empty():
+            task = gui_queue.get()
+            try:
+                task()
+            except Exception as e:
+                print(f"Error running GUI task: {e}")
+        root.after(100, poll_gui_tasks)
+
+    poll_gui_tasks()
+    root.mainloop()
 
 if __name__ == "__main__":
     main()

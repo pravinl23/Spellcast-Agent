@@ -12,9 +12,11 @@ dot_canvas = None
 region_window = None
 background_image = None
 
+root = None
+
 # Handles mouse clicks on the canvas, marks clicked position with red dot, and captures coords
 def on_canvas_click(event):
-    global click_count, top_left, bottom_right, region
+    global click_count, top_left, bottom_right, region, root
 
     # Get the clicked position (x, y) on the canvas
     x, y = event.x, event.y
@@ -40,7 +42,7 @@ def on_canvas_click(event):
             f.write(f"{region[0]},{region[1]},{region[2]},{region[3]}")
 
         # Close the region selection window
-        region_window.quit()
+        root.destroy()
 
     # Increment the click counter
     click_count += 1
@@ -48,7 +50,7 @@ def on_canvas_click(event):
 # creates define region area by first taking a screenshot of the screen, then using that as the background for a 
 # defining region popup where users can manually click what area of the screen they want to take screenshots of
 def define_region():
-    global dot_canvas, region_window, background_image
+    global dot_canvas, region_window, background_image, root
 
     background_ss = "background.png"
     # Remove any previous screenshot to ensure a fresh capture
@@ -63,6 +65,10 @@ def define_region():
     # Open the saved screenshot and resize it to match the screen dimensions
     screenshot = Image.open(background_ss)
     screenshot = screenshot.resize((screen_width, screen_height), Image.Resampling.LANCZOS)
+
+    root = tk.Tk()
+    root.withdraw()
+
     # Convert the resized image to a PhotoImage format for tkinter
     background_image = ImageTk.PhotoImage(screenshot)
 
@@ -85,24 +91,10 @@ def define_region():
     # Delete the screenshot because it is uncessary after this
     os.remove(background_ss)
 
+    root.mainloop()
+
 
 if __name__ == "__main__":
-    # Create the popup window for defining region
-    root = tk.Tk()
-    # This is for the actual window not button
-    root.title("Region Setup")
-    root.geometry("300x100")
-    root.configure(bg="azure2")
-
-    # This is for the button on the popup window
-    button = tk.Button(
-        root,
-        text="Define Region",
-        font='Helvetica 18 bold',
-        command=define_region # Calls the define_region function on click
-    )
-
-    button.pack(pady=20)
-
-    # Start the tkinter event loop to display the popup window
-    root.mainloop()
+    if os.path.exists('region_data.txt'):
+        os.remove('region_data.txt')
+    define_region()

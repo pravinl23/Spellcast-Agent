@@ -1,3 +1,5 @@
+from export_grid import export_grid
+
 # Define the letter point mapping
 score_mapping = {
     'A': 1, 'E': 1, 'I': 1, 'O': 1,
@@ -221,3 +223,14 @@ def solve_grid(grid, dictionary_path="dictionary.txt"):
     
     return results
 
+
+
+def solve_grid_main():
+    grid = export_grid()
+
+    results = solve_grid(grid)
+    print(f"\nBest word found: {results['word']} (Score: {results['score']})")
+    print("\nPath to follow:")
+    print(results['path_instructions'])
+    print("\nGrid with path:")
+    print(results['grid_display'])
