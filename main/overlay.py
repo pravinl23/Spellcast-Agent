@@ -58,11 +58,19 @@ def pop_grid_overlay(grid, path_coords=None, window_size=250):
             canvas.create_oval(
                 cx - radius, cy - radius,
                 cx + radius, cy + radius,
-                outline='blue', width=1
+                outline='red', width=1
             )
             if i > 0:
                 x1, y1 = centers[i-1]
-                canvas.create_line(x1, y1, cx, cy, fill='blue', width=2)
+                canvas.create_line(x1, y1, cx, cy, fill='red', width=2)
+        # Starting spot
+        sx, sy = centers[0]
+        canvas.create_text(
+            sx, sy - radius*2,
+            text='START',
+            font=('Helvetica', int(cell*0.3), 'bold'),
+            fill='#FFFF00'
+        )
 
     # Make window draggable
     def start_move(e):
