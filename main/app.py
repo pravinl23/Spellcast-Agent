@@ -2,11 +2,8 @@ import os
 from export_grid import export_grid
 from word_finder import solve_grid
 from pynput import keyboard
-from setup_region import define_region
 from screenshot import take_screenshot
 import tkinter as tk
-from PIL import Image, ImageTk, ImageGrab
-from screeninfo import get_monitors
 import queue
 import threading
 import subprocess
@@ -24,15 +21,9 @@ def run_screenshot():
     take_screenshot()
 
 def get_output():
-    grid = export_grid()
-    for row in grid:
-        print(row)
-    results = solve_grid(grid)
-    print(f"\nBest word found: {results['word']} (Score: {results['score']})")
-    print("\nPath to follow:")
-    print(results['path_instructions'])
-    print("\nGrid with path:")
-    print(results['grid_display'])
+    script = os.path.join(os.path.dirname(__file__), "overlay.py")
+    python_exe = sys.executable
+    subprocess.Popen([python_exe, script])
 
 # Track pressed keys for Command shortcuts
 current_keys = set()
