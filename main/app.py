@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 gui_queue = queue.Queue()
+overlay_proc = None
 
 # Queue GUI task instead of calling directly
 def run_setup_region():
@@ -18,12 +19,28 @@ def run_setup_region():
     subprocess.Popen([python_exe, script])
 
 def run_screenshot():
+    global overlay_proc
+    # Kill any existing overlay 
+    if overlay_proc is not None:
+        try:
+            overlay_proc.terminate()
+        except Exception:
+            pass
+        overlay_proc = None
+
     take_screenshot()
 
 def get_output():
+    global overlay_proc
     script = os.path.join(os.path.dirname(__file__), "overlay.py")
-    python_exe = sys.executable
-    subprocess.Popen([python_exe, script])
+    # kill any existing overlay before spawning a new one
+    if overlay_proc is not None:
+        try:
+            overlay_proc.terminate()
+        except Exception:
+            pass
+
+    overlay_proc = subprocess.Popen([sys.executable, script])
 
 # Track pressed keys for Command shortcuts
 current_keys = set()
