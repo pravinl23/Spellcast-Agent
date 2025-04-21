@@ -11,3 +11,10 @@ dictionary.txt
 *.gif
 *.bmp
 *.tiff
+dictionary.
+dictionary.js
+singledict.js
+package.json
+package-lock.json
+node_modules
+words_by_letter
