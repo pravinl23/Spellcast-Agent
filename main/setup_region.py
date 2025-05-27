@@ -37,7 +37,11 @@ def on_canvas_click(event):
         region = (top_left[0], top_left[1], bottom_right[0] - top_left[0], bottom_right[1] - top_left[1])
         
         # Save the region data to a file for later use
-        with open('region_data.txt', 'w') as f:
+        # Get the parent directory (spellcast-solver) to save the file there
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(script_dir)
+        region_file_path = os.path.join(parent_dir, 'region_data.txt')
+        with open(region_file_path, 'w') as f:
             # Write the region in the format x, y, width, height
             f.write(f"{region[0]},{region[1]},{region[2]},{region[3]}")
 
@@ -95,6 +99,10 @@ def define_region():
 
 
 if __name__ == "__main__":
-    if os.path.exists('region_data.txt'):
-        os.remove('region_data.txt')
+    # Get the parent directory (spellcast-solver) to check for the file there
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    region_file_path = os.path.join(parent_dir, 'region_data.txt')
+    if os.path.exists(region_file_path):
+        os.remove(region_file_path)
     define_region()

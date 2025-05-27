@@ -51,7 +51,7 @@ def export_grid():
     model = YOLO(model_path)
 
     # Retrieve results from the grid
-    image_path = os.path.join(os.path.dirname(script_dir), "grid.png")
+    image_path = os.path.join(script_dir, "grid.png")
     results = model(image_path)
 
     detections = []
