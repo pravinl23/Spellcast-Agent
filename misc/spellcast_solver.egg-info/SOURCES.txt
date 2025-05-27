@@ -1,0 +1,15 @@
+README.md
+setup.py
+main/__init__.py
+main/app.py
+main/export_grid.py
+main/overlay.py
+main/screenshot.py
+main/setup_region.py
+main/word_finder.py
+spellcast_solver.egg-info/PKG-INFO
+spellcast_solver.egg-info/SOURCES.txt
+spellcast_solver.egg-info/dependency_links.txt
+spellcast_solver.egg-info/entry_points.txt
+spellcast_solver.egg-info/requires.txt
+spellcast_solver.egg-info/top_level.txt

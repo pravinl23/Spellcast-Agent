@@ -1,0 +1,2 @@
+[console_scripts]
+spellcast-solver = main.app:main

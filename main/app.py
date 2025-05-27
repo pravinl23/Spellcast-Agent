@@ -1,13 +1,12 @@
 import os
-from export_grid import export_grid
-from word_finder import solve_grid
-from pynput import keyboard
-from screenshot import take_screenshot
-import tkinter as tk
+import sys
+import subprocess
 import queue
 import threading
-import subprocess
-import sys
+import tkinter as tk
+from pynput import keyboard
+from screenshot import take_screenshot
+
 
 gui_queue = queue.Queue()
 overlay_proc = None

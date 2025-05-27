@@ -1,0 +1,6 @@
+pillow
+screeninfo
+pynput
+torch
+torchvision
+tqdm

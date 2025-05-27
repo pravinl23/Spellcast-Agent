@@ -44,11 +44,14 @@ def to_2d_array(detections, rows, cols):
 
 def export_grid():
     # Temporary model, trained by CHY4E
-    model_path = "best.pt"
+    import os
+    # Get the directory where this script is located
+    script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    model_path = os.path.join(script_dir, "best.pt")
     model = YOLO(model_path)
 
     # Retrieve results from the grid
-    image_path = "grid.png"
+    image_path = os.path.join(os.path.dirname(script_dir), "grid.png")
     results = model(image_path)
 
     detections = []

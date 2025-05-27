@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: spellcast-solver
+Version: 0.1.0
+Summary: Automate SpellCast puzzles: region‑select, OCR, solve & overlay
+Requires-Dist: pillow
+Requires-Dist: screeninfo
+Requires-Dist: pynput
+Requires-Dist: torch
+Requires-Dist: torchvision
+Requires-Dist: tqdm
+Dynamic: requires-dist
+Dynamic: summary

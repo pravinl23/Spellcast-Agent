@@ -109,7 +109,12 @@ def find_words(grid, dictionary_words, prefix_set):
     return found_words
 
 def find_best_word(grid, dictionary_path="dictionary.txt"):
-    # Load dictionary
+    # Load dictionary with absolute path
+    import os
+    if dictionary_path == "dictionary.txt":
+        # Get the directory where this script is located and go up one level to spellcast-solver
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        dictionary_path = os.path.join(script_dir, "dictionary.txt")
     words, prefix_set = load_dictionary(dictionary_path)
     
     # Find all valid words
@@ -205,6 +210,13 @@ def solve_grid(grid, dictionary_path="dictionary.txt"):
     # Validate grid
     if not grid or not grid[0]:
         return {"error": "Empty grid provided"}
+    
+    # Resolve dictionary path if using default
+    import os
+    if dictionary_path == "dictionary.txt":
+        # Get the directory where this script is located and go up one level to spellcast-solver
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        dictionary_path = os.path.join(script_dir, "dictionary.txt")
     
     # Find the best word
     word, score, path = find_best_word(grid, dictionary_path)
