@@ -6,13 +6,17 @@ import threading
 import tkinter as tk
 from pynput import keyboard
 from screenshot import take_screenshot
+from auto_solver import auto_solve
+from agentic import agentic_solve, stop_agentic_mode
 
 
 gui_queue = queue.Queue()
 overlay_proc = None
+agentic_mode_active = False
 
-# Queue GUI task instead of calling directly
-def run_setup_region():
+def export_grid_dimensions():
+    # Setup grid region by running setup_region.py
+    print("Launching region setup tool...")
     script = os.path.join(os.path.dirname(__file__), "setup_region.py")
     python_exe = sys.executable
     subprocess.Popen([python_exe, script])
@@ -49,14 +53,22 @@ def on_press(key):
         current_keys.add(key)
         if keyboard.Key.cmd in current_keys and hasattr(key, 'char'):
             if key.char == '1':
-                print("Setting up region...")
-                run_setup_region()
+                print("Exporting grid dimensions...")
+                export_grid_dimensions()
             elif key.char == '2':
                 print("Taking screenshot...")
                 run_screenshot()
             elif key.char == '3':
-                print("Processing output...")
+                print("Extracting grid and showing overlay...")
                 get_output()
+            elif key.char == '4':
+                print("Auto solving puzzle...")
+                auto_solve()
+            elif key.char == '5':
+                print("Starting agentic mode...")
+                agentic_solve()
+            elif key.char == 'k':
+                stop_agentic_mode()
     except AttributeError:
         pass
 
@@ -72,9 +84,12 @@ def main():
     global root
     print("Spellcast Solver is running in the background.")
     print("Use the following keyboard shortcuts:")
-    print("⌘+1: Setup Region")
+    print("⌘+1: Export Grid Dimensions")
     print("⌘+2: Take Screenshot")
-    print("⌘+3: Process and Get Output")
+    print("⌘+3: Extract Grid and Show Overlay")
+    print("⌘+4: Auto Drag and Solve")
+    print("⌘+5: Agentic Mode (continuous solving)")
+    print("⌘+K: Stop Agentic Mode")
     print("Press Ctrl+C to exit")
 
     listener = keyboard.Listener(on_press=on_press, on_release=on_release)
