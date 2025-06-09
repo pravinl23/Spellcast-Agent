@@ -61,6 +61,7 @@ def perform_drag_sequence(path_coords, grid_coordinates, drag_duration=0.4, paus
 
     # Re-enable failsafe
     pyautogui.FAILSAFE = True
+    return True
 
 
 def auto_solve():

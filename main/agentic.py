@@ -79,8 +79,9 @@ def agentic_solve():
                 print(f"Successfully executed: {results['word']}")
                 
                 # Wait before next cycle (can be interrupted by stop command)
-                print("Waiting 10 seconds before next cycle...")
-                for i in range(10):
+                print("Waiting 12 seconds before next cycle...")
+                for i in range(12):
+                    print("waiting")
                     if not agentic_mode_active:
                         break
                     time.sleep(1)
