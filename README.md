@@ -1,4 +1,4 @@
-# Spellcast AI Solver
+# Spellcast Agent
 
 An AI-powered desktop app that automatically solves Spellcast word puzzles for you.
 
