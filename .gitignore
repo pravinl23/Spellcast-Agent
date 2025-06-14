@@ -19,4 +19,9 @@ node_modules
 words_by_letter
 compare_grids.py
 region_data.txt
-upgraded_model.pt
+oldmodel.pt
+/misc
+/runs
+/labelstudioupload
+/dataset
+best.path
