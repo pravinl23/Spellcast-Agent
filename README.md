@@ -125,3 +125,14 @@ Training this model was a highly iterative process. I curated and labeled a dive
 ## Reflections
 
 Training this model required careful dataset preparation, hyperparameter tuning, and continuous monitoring of metrics. The visualizations provided deep insights into model behavior, helping to identify and address rare misclassifications. The result is a highly reliable letter detector, ready for integration into the Spellcast AI Solver pipeline.
+
+## Deployment & Infrastructure
+
+To ensure the OCR model is always available for the solver, I deployed it on AWS EC2 using FastAPI and Uvicorn. The model runs in a persistent tmux session, ensuring 24/7 availability even after SSH disconnections. The desktop application makes HTTP requests to this endpoint whenever it needs to process a new game grid.
+
+The deployment stack includes:
+- FastAPI for the web server
+- Uvicorn as the production server
+- tmux for persistent process management
+
+This setup allows the desktop application to offload the computationally intensive OCR tasks to the cloud, while maintaining low latency for real-time game solving.
