@@ -1,4 +1,9 @@
-from ultralytics import YOLO
+import os
+import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
+REMOTE_URL = os.environ.get("REMOTE_URL", "http://localhost:8000/predict")
 
 CLASS_MAP = {
     0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 
@@ -32,10 +37,7 @@ def to_2d_array(detections, rows, cols):
         row_dets_sorted = sorted(row_dets, key=lambda d: d['cx'])
 
         # Convert to characters
-        row_chars = []
-        for det in row_dets_sorted:
-            char = CLASS_MAP.get(det['class'], '?')
-            row_chars.append(char)
+        row_chars = [CLASS_MAP.get(det['class'], '?') for det in row_dets_sorted]
 
         grid.append(row_chars)
 
@@ -43,43 +45,44 @@ def to_2d_array(detections, rows, cols):
 
 
 def export_grid():
-    import os
-    # Get the directory where this script is located
-    script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    model_path = os.path.join(script_dir, "best.pt")
-    model = YOLO(model_path)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(script_dir, "../grid.png")
 
-    # Retrieve results from the grid
-    image_path = os.path.join(script_dir, "grid.png")
-    results = model(image_path)
+    with open(image_path, "rb") as img_file:
+        files = {"file": ("../grid.png", img_file, "image/png")}
+        response = httpx.post(REMOTE_URL, files=files)
+        response.raise_for_status()
+        data = response.json()
+
+    # Validate expected keys exist
+    if not all(k in data for k in ("boxes", "confidences", "class_ids")):
+        raise ValueError(f"Unexpected response structure: {data}")
 
     detections = []
+    for i, box in enumerate(data["boxes"]):
+        x1, y1, x2, y2 = box
+        detections.append({
+            'x1': x1,
+            'y1': y1,
+            'x2': x2,
+            'y2': y2,
+            'class': int(data["class_ids"][i]),
+            'conf': data["confidences"][i]
+        })
 
-     # Iterate over each result returned by the model
-    for result in results:
-        # Loop over each detected bounding box in the current result.
-        for det in result.boxes:
-            # Extract the coordinates for the bounding box in the format [x1, y1, x2, y2]
-            # https://github.com/ultralytics/ultralytics/issues/10988
-            xyxy = det.xyxy[0]
-            x1, y1, x2, y2 = xyxy
+    return to_2d_array(detections, rows=5, cols=5)
 
-            # Extract the confidence score of the detection which indicates the model's certainty
-            conf = det.conf
-            
-            # Extract the class ID (as a float) and convert it to an integer which indicates what letter it is
-            cls = int(det.cls)
-            
-            # Append a dictionary containing all the detection details to the 'detections' list.
-            detections.append({
-                'x1': x1,
-                'y1': y1,
-                'x2': x2,
-                'y2': y2,
-                'class': cls,
-                'conf': conf
-            })
 
-    grid = to_2d_array(detections, rows=5, cols=5)
-    
-    return grid
+def main():
+    try:
+        print("Exporting grid from image...")
+        grid = export_grid()
+
+        print("\nExtracted Grid:")
+        for row in grid:
+            print(" ".join(row))
+    except Exception as e:
+        print(f"\n[ERROR] Failed to extract grid: {e}")
+
+if __name__ == "__main__":
+    main()

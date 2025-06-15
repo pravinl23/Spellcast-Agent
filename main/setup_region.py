@@ -11,98 +11,73 @@ bottom_right = None
 dot_canvas = None
 region_window = None
 background_image = None
+dot_coords = []  # keep track of drawn dots for clarity
 
-root = None
-
-# Handles mouse clicks on the canvas, marks clicked position with red dot, and captures coords
+# Handles mouse clicks on the canvas
 def on_canvas_click(event):
-    global click_count, top_left, bottom_right, region, root
+    global click_count, top_left, bottom_right, region, region_window
 
-    # Get the clicked position (x, y) on the canvas
     x, y = event.x, event.y
+    dot_canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="red", outline="red")
+    dot_canvas.update()  # ensure dot renders immediately
 
-    # Put a small red dot on the canvas at the clicked position
-    dot_canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", outline="red")
-
-    # This saves the positions for the top left and bottom right corners
     if click_count == 0:
-        # First click sets the top left corner
         top_left = (x, y)
-
     elif click_count == 1:
-        # Second click sets the bottom right corner
         bottom_right = (x, y)
+        region = (
+            top_left[0],
+            top_left[1],
+            bottom_right[0] - top_left[0],
+            bottom_right[1] - top_left[1]
+        )
 
-        # Create the region based on the two selected corners
-        region = (top_left[0], top_left[1], bottom_right[0] - top_left[0], bottom_right[1] - top_left[1])
-        
-        # Save the region data to a file for later use
-        # Get the parent directory (spellcast-solver) to save the file there
+        # Save region to file
         script_dir = os.path.dirname(os.path.abspath(__file__))
         parent_dir = os.path.dirname(script_dir)
         region_file_path = os.path.join(parent_dir, 'region_data.txt')
+
         with open(region_file_path, 'w') as f:
-            # Write the region in the format x, y, width, height
             f.write(f"{region[0]},{region[1]},{region[2]},{region[3]}")
 
-        # Close the region selection window
-        root.destroy()
+        region_window.destroy()
 
-    # Increment the click counter
     click_count += 1
 
-# creates define region area by first taking a screenshot of the screen, then using that as the background for a 
-# defining region popup where users can manually click what area of the screen they want to take screenshots of
 def define_region():
-    global dot_canvas, region_window, background_image, root
+    global dot_canvas, region_window, background_image
 
     background_ss = "background.png"
-    # Remove any previous screenshot to ensure a fresh capture
     if os.path.exists(background_ss):
         os.remove(background_ss)
-    # Capture the entire screen using pyautogui and save it as a file
+
+    # Capture full screen
     bg_ss = ImageGrab.grab()
     bg_ss.save(background_ss)
-    # Get the screen dimensions (width and height)
-    monitor = get_monitors()[0]  # get primary monitor (adjust index if needed for multi-monitor setups)
+
+    monitor = get_monitors()[0]
     screen_width, screen_height = monitor.width, monitor.height
-    # Open the saved screenshot and resize it to match the screen dimensions
+
     screenshot = Image.open(background_ss)
     screenshot = screenshot.resize((screen_width, screen_height), Image.Resampling.LANCZOS)
 
-    root = tk.Tk()
-    root.withdraw()
-
-    # Convert the resized image to a PhotoImage format for tkinter
-    background_image = ImageTk.PhotoImage(screenshot)
-
-    # Create a new tkinter window for region selection
     region_window = tk.Toplevel()
     region_window.title("Define Region")
-
-    # Set window background colour and make it fullscreen
     region_window.configure(bg="black")
-    region_window.attributes("-fullscreen", True)
+    region_window.geometry(f"{screen_width}x{screen_height}+0+0")
+    region_window.attributes("-topmost", True)
 
-    # Create a canvas that display the screenshot and detect mouse clicks
+    # Store the image to prevent garbage collection
+    background_image = ImageTk.PhotoImage(screenshot)
+    region_window.background_image_ref = background_image
+
     dot_canvas = tk.Canvas(region_window, bg="black", highlightthickness=0, width=screen_width, height=screen_height)
     dot_canvas.pack(fill=tk.BOTH, expand=True)
     dot_canvas.create_image(0, 0, anchor="nw", image=background_image)
-
-    # Button-1 is left mouse button, when clicked it calls on_canvas_click function
     dot_canvas.bind("<Button-1>", on_canvas_click)
 
-    # Delete the screenshot because it is uncessary after this
-    os.remove(background_ss)
+    if os.path.exists(background_ss):
+        os.remove(background_ss)
 
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    # Get the parent directory (spellcast-solver) to check for the file there
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(script_dir)
-    region_file_path = os.path.join(parent_dir, 'region_data.txt')
-    if os.path.exists(region_file_path):
-        os.remove(region_file_path)
-    define_region()
+    print("Starting region GUI...")
+    region_window.mainloop()

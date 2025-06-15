@@ -4,9 +4,6 @@ __pycache__/
 venv/
 .env/
 grid.png
-*.png
-*.jpg
-*.jpeg
 *.gif
 *.bmp
 *.tiff
@@ -25,3 +22,7 @@ oldmodel.pt
 /labelstudioupload
 /dataset
 best.path
+.env
+.venv/
+.DS_Store
+main/venv

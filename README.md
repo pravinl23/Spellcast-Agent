@@ -26,8 +26,8 @@ This app can:
    - `⌘+2` - Take screenshot
    - `⌘+3` - Show solution overlay
    - `⌘+4` - Auto-solve (moves mouse automatically)
-   - `⌘+5` - Auto-solve continuously 
-   - `⌘+K` - Stop auto-solving
+   - `⌘+5` - Agentically play
+   - `⌘+K` - Stop agentic mode
 
 ## How it works
 
@@ -125,40 +125,3 @@ Training this model was a highly iterative process. I curated and labeled a dive
 ## Reflections
 
 Training this model required careful dataset preparation, hyperparameter tuning, and continuous monitoring of metrics. The visualizations provided deep insights into model behavior, helping to identify and address rare misclassifications. The result is a highly reliable letter detector, ready for integration into the Spellcast AI Solver pipeline.
-
----
-
-## File List
-
-- `img/confusion_matrix_normalized.png`
-- `img/confusion_matrix.png`
-- `img/F1_curve.png`
-- `img/labels.jpg`
-- `img/P_curve.png`
-- `img/PR_curve.png`
-- `img/R_curve.png`
-- `img/results.png`
-- `img/train_batch0.jpg`
-- `img/train_batch1.jpg`
-- `img/train_batch2.jpg`
-- `img/train_batch490.jpg`
-- `img/train_batch491.jpg`
-- `img/train_batch492.jpg`
-- `img/val_batch0_labels.jpg`
-- `img/val_batch0_pred.jpg`
-- `results.csv`
-
----
-
-## How to Display Images in the README
-
-To ensure the images render correctly in your README:
-
-- Place all the image files (e.g., `.png`, `.jpg`) in the `img/` subfolder, located in the same directory as your `README.md` file.
-- The image links in the README are set to reference the `img/` folder, e.g., `![Confusion Matrix](img/confusion_matrix.png)`.
-- When viewing the README on GitHub or similar platforms, the images will display automatically if the paths are correct and the files are committed to the repository.
-
----
-
-**For more details, see the images above and the full training log. If you have questions or want to use this model, feel free to reach out!**
-

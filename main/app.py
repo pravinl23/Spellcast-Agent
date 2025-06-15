@@ -17,9 +17,13 @@ agentic_mode_active = False
 def export_grid_dimensions():
     # Setup grid region by running setup_region.py
     print("Launching region setup tool...")
-    script = os.path.join(os.path.dirname(__file__), "setup_region.py")
-    python_exe = sys.executable
-    subprocess.Popen([python_exe, script])
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    region_file_path = os.path.join(parent_dir, 'region_data.txt')
+    if os.path.exists(region_file_path):
+        os.remove(region_file_path)
+    from setup_region import define_region
+    gui_queue.put(define_region)
 
 def run_screenshot():
     global overlay_proc
