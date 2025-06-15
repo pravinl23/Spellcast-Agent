@@ -14,7 +14,7 @@ def load_region():
 
 def take_screenshot():
     # Take a screenshot of the specified region
-    region = load_region();
+    region = load_region()
     script_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(script_dir)
     screenshot_path = os.path.join(parent_dir, "grid.png")
