@@ -7,7 +7,7 @@ An AI-powered desktop app that automatically solves Spellcast word puzzles for y
 This app can:
 - 📸 Take screenshots of your Spellcast game
 - 🤖 Uses OCR to read the letters in the grid
-- 🎯 Finds the highest-scoring word using BFS  
+- 🎯 Finds the highest-scoring word using DFS with prefix comparison  
 - 🖱️ GUI automation to automatically trace the solution
 - 🔄 Agentic mode to play an entire game through without the press of a single button
 
