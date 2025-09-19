@@ -2,6 +2,9 @@
 
 An AI-powered desktop app that automatically solves Spellcast word puzzles for you.
 
+https://github.com/user-attachments/assets/f42e0bb8-9943-44f3-86e1-84a32968b2ae
+
+
 ## What it does
 
 This app can:
